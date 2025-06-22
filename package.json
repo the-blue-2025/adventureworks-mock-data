@@ -1,0 +1,28 @@
+{
+  "name": "adventureworks-frontend",
+  "version": "1.0.0",
+  "description": "AdventureWorks Frontend with JSON Server",
+  "main": "index.js",
+  "scripts": {
+    "start": "json-server --watch mock-data/db.json --port 3000 --routes mock-data/routes.json --middlewares mock-data/middleware.js",
+    "dev": "json-server --watch mock-data/db.json --port 3000 --routes mock-data/routes.json --middlewares mock-data/middleware.js --host 0.0.0.0",
+    "server": "node server.js",
+    "config": "json-server --config json-server.json mock-data/db.json",
+    "test": "node test-server.js"
+  },
+  "dependencies": {
+    "json-server": "^0.17.4",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": [
+    "adventureworks",
+    "json-server",
+    "mock-api",
+    "angular"
+  ],
+  "author": "",
+  "license": "MIT"
+} 

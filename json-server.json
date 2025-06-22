@@ -1,0 +1,17 @@
+{
+  "port": 3000,
+  "host": "localhost",
+  "watch": true,
+  "routes": "./mock-data/routes.json",
+  "middlewares": ["./mock-data/middleware.js"],
+  "static": "./public",
+  "no-cors": false,
+  "no-gzip": false,
+  "read-only": false,
+  "no-clipboard": false,
+  "no-body-parser": false,
+  "no-cors-headers": false,
+  "quiet": false,
+  "delay": 0,
+  "id": "id"
+} 
