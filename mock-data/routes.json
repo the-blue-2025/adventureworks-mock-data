@@ -1,7 +1,10 @@
 {
-  "/api/persons*": "/persons$1",
-  "/api/vendors*": "/vendors$1",
-  "/api/purchase-orders*": "/purchase-orders$1",
-  "/api/ship-methods": "/ship-methods",
-  "/api/purchase-order-details": "/purchase-order-details"
-} 
+  "/api/v1/persons*": "/persons$1",
+  "/api/v1/vendors*": "/vendors$1",
+  "/api/v1/ship-methods": "/ship-methods",
+  "/api/v1/territories": "/territories",
+  "/api/v1/purchase-orders*": "/purchase-orders$1",
+  "/api/v1/purchase-order-details": "/purchase-order-details",
+  "/api/v1/sales-orders*": "/sales-order-headers$1",
+  "/api/v1/sales-order-details": "/sales-order-details"
+}

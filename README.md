@@ -42,7 +42,7 @@ npx json-server --watch mock-data/db.json --port 3000 --routes mock-data/routes.
 
 ## 📊 Available API Endpoints
 
-The JSON server provides the following endpoints with **89 total records** across all collections:
+The JSON server provides the following endpoints with **99 total records** across all collections:
 
 ### Persons (12 records)
 - `GET /api/persons` - Get all persons
@@ -72,6 +72,24 @@ The JSON server provides the following endpoints with **89 total records** acros
 ### Purchase Order Details (45 records)
 - `GET /api/purchase-order-details` - Get all purchase order details
 
+### Territories (10 records)
+- `GET /api/v1/territories` - Get all territories
+- `GET /api/v1/territories/:id` - Get territory by ID
+- `POST /api/v1/territories` - Create new territory
+- `PUT /api/v1/territories/:id` - Update territory
+- `DELETE /api/v1/territories/:id` - Delete territory
+
+### Sales Orders (50 records)
+- `GET /api/v1/sales-orders` - Get all sales orders (with customer, sales person, and territory info)
+- `GET /api/v1/sales-orders/:id` - Get sales order by ID (with customer, sales person, territory, and details)
+- `GET /api/v1/sales-orders/:id/details` - Get sales order details only
+- `POST /api/v1/sales-orders` - Create new sales order
+- `PUT /api/v1/sales-orders/:id` - Update sales order
+- `DELETE /api/v1/sales-orders/:id` - Delete sales order
+
+### Sales Order Details (200 records)
+- `GET /api/sales-order-details` - Get all sales order details
+
 ## 🔧 Features
 
 ### Custom Middleware
@@ -80,7 +98,9 @@ The server includes custom middleware that provides:
 1. **CORS Support** - Cross-origin requests enabled
 2. **Request Logging** - All requests are logged with timestamps
 3. **Enhanced Purchase Order Endpoints** - Purchase orders include vendor information and details
-4. **Cache Control** - Proper cache headers for dynamic data
+4. **Enhanced Sales Order Endpoints** - Sales orders include customer, sales person, and territory information with details
+5. **Cache Control** - Proper cache headers for dynamic data
+6. **Territory Management** - Territory data with geographic information
 
 ### Data Structure
 The mock data includes:
@@ -88,20 +108,58 @@ The mock data includes:
 - **Vendors**: Supplier information with credit ratings and status
 - **Purchase Orders**: Order management with vendor relationships
 - **Purchase Order Details**: Line items for each order
+- **Sales Order Headers**: Sales order management with customer relationships
+- **Sales Order Details**: Line items for each sales order
 - **Ship Methods**: Shipping options
+- **Territories**: Geographic regions with country and group information
+
+### Enhanced Sales Order Response Structure
+Sales order endpoints now include rich relational data:
+
+```json
+{
+  "salesOrderId": 1,
+  "salesOrderNumber": "SO000001",
+  "customer": {
+    "businessEntityId": 10,
+    "firstName": "John",
+    "lastName": "Doe",
+    "title": "Mr.",
+    "fullName": "Mr. John Doe"
+  },
+  "salesPerson": {
+    "businessEntityId": 4,
+    "firstName": "Sarah",
+    "lastName": "Williams",
+    "title": "Mrs.",
+    "fullName": "Mrs. Sarah Williams"
+  },
+  "territory": {
+    "territoryId": 9,
+    "name": "Australia",
+    "countryRegionCode": "AU",
+    "group": "Pacific"
+  },
+  "salesOrderDetails": [...]
+}
+```
 
 ### Query Support
 All endpoints support JSON Server's query features:
 - `GET /api/persons?personType=EM` - Filter by person type
 - `GET /api/vendors?preferredVendorStatus=true` - Filter preferred vendors
 - `GET /api/purchase-orders?_page=1&_limit=10` - Pagination
+- `GET /api/v1/sales-orders?status=4` - Filter by order status
+- `GET /api/v1/sales-orders?customerId=1` - Filter by customer
+- `GET /api/v1/territories?group=North America` - Filter territories by group
 - `GET /api/persons?_sort=lastName&_order=asc` - Sorting
 
 ## 🅰️ Angular Integration
 
-### Service Example
-Use the provided `example-angular-service.ts` as a starting point for your Angular services:
+### Service Examples
+Use the provided service examples as starting points for your Angular services:
 
+#### Purchase Orders Service
 ```typescript
 import { AdventureWorksService } from './services/adventureworks.service';
 
@@ -117,6 +175,31 @@ this.adventureWorksService.getPersons().subscribe(persons => {
 this.adventureWorksService.getPurchaseOrder(1).subscribe(order => {
   console.log('Order with vendor:', order.vendor);
   console.log('Order details:', order.purchaseOrderDetails);
+});
+```
+
+#### Sales Orders Service
+```typescript
+import { SalesOrderService } from './services/sales-order.service';
+
+// In your component
+constructor(private salesOrderService: SalesOrderService) {}
+
+// Get all sales orders with customer info
+this.salesOrderService.getSalesOrders().subscribe(orders => {
+  console.log('Sales orders:', orders);
+});
+
+// Get sales order with customer and details
+this.salesOrderService.getSalesOrder(1).subscribe(order => {
+  console.log('Order with customer:', order.customer);
+  console.log('Order details:', order.salesOrderDetails);
+});
+
+// Get sales statistics
+this.salesOrderService.getSalesStatistics().subscribe(stats => {
+  console.log('Total revenue:', stats.totalRevenue);
+  console.log('Average order value:', stats.averageOrderValue);
 });
 ```
 
@@ -172,9 +255,24 @@ curl http://localhost:3000/api/persons
 curl http://localhost:3000/api/purchase-orders/1
 ```
 
+### Get sales order with customer, sales person, and territory
+```bash
+curl http://localhost:3000/api/v1/sales-orders/1
+```
+
+### Get all territories
+```bash
+curl http://localhost:3000/api/v1/territories
+```
+
 ### Filter vendors by status
 ```bash
 curl http://localhost:3000/api/vendors?preferredVendorStatus=true
+```
+
+### Filter territories by group
+```bash
+curl http://localhost:3000/api/v1/territories?group=North America
 ```
 
 ### Test all endpoints
